@@ -40,6 +40,7 @@ public class Ceelo {
             System.out.println("error");
         }
         ConsoleUtility.clearScreen();
+        System.out.println();
 
     }
 
