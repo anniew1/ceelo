@@ -41,7 +41,6 @@ public class Ceelo {
         }
         ConsoleUtility.clearScreen();
 
-        System.out.println();
     }
 
     private void printStatus(){
