@@ -18,11 +18,13 @@ public class Ceelo {
     private void gameLogic() {
         welcome();
         while ((p1.getChips() != 0 && p2.getChips() != 0 && p3.getChips() != 0) || banker.getChips() != 0) {
-            printStatus();
-            System.out.println();
+            printChip();
             makeWager(p1.getOutOfGame(), p1);
             makeWager(p2.getOutOfGame(), p2);
             makeWager(p3.getOutOfGame(), p3);
+            if (!banker.rolldice().equals("score")) {
+                switchChips(banker.rolldice());
+            }
         }
     }
 
@@ -57,11 +59,12 @@ public class Ceelo {
     }
 
     // prints out how many chips each player and banker has each round
-    private void printStatus(){
+    private void printChip(){
         System.out.println(p1.getName() + " has " + p1.getChips() + " chips");
         System.out.println(p2.getName() + " has " + p2.getChips() + " chips");
         System.out.println(p3.getName() + " has " + p3.getChips() + " chips");
         System.out.println("The banker has " + banker.getChips() + " chips");
+        System.out.println();
     }
 
 
@@ -69,11 +72,11 @@ public class Ceelo {
     private void makeWager(Boolean playerout, Player player) {
         if (!playerout){
             System.out.println(player.getName() + "'s Turn:");
-            System.out.print("How much would you like to wager (0 -" + player.getChips() + "):" );
+            System.out.print("How much would you like to wager (0 - " + player.getChips() + "): " );
             player.setCurrentWager(scan.nextInt());
             while (player.getCurrentWager() < 0 || player.getCurrentWager() > player.getChips()) {
                 System.out.println("Invalid wager. ");
-                System.out.print("How much would you like to wager (0 -" + player.getChips() + "):" );
+                System.out.print("How much would you like to wager (0 - " + player.getChips() + "): " );
                 player.setCurrentWager(scan.nextInt());
             }
             try {
@@ -84,6 +87,26 @@ public class Ceelo {
 
             ConsoleUtility.clearScreen();
         }
+    }
+
+    // adjusts the chips for both the banker and the players if the banker either automatically loses or wins
+    private void switchChips(String status) {
+        int p1Chips = p1.getCurrentWager();
+        int p2Chips = p2.getCurrentWager();
+        int p3Chips = p3.getCurrentWager();
+
+        if (status.equals("win")) {
+            p1.changeChips(p1Chips * -1);
+            p2.changeChips(p1Chips * -1);
+            p3.changeChips(p1Chips * -1);
+            banker.changeChips(p1Chips + p2Chips + p3Chips);
+        } else {
+            p1.changeChips(p1Chips);
+            p2.changeChips(p1Chips);
+            p3.changeChips(p1Chips);
+            banker.changeChips((p1Chips + p2Chips + p3Chips) * -1);
+        }
+
     }
 
 
