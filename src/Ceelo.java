@@ -6,9 +6,11 @@ public class Ceelo {
     private Player p2;
     private Player p3;
     private Banker banker;
+    private int roundNum;
     public Ceelo() {
         scan = new Scanner(System.in);
         banker = new Banker();
+        roundNum = 1;
     }
 
     public void runGame() {
@@ -18,13 +20,20 @@ public class Ceelo {
     private void gameLogic() {
         welcome();
         while ((p1.getChips() != 0 && p2.getChips() != 0 && p3.getChips() != 0) || banker.getChips() != 0) {
+            System.out.println("Round " + roundNum + ":");
             printChip();
             makeWager(p1.getOutOfGame(), p1);
             makeWager(p2.getOutOfGame(), p2);
             makeWager(p3.getOutOfGame(), p3);
-            if (!banker.rolldice().equals("score")) {
-                switchChips(banker.rolldice());
+            String bankerRoll = banker.rolldice();
+            if (!bankerRoll.equals("score")) {
+                switchChips(bankerRoll);
+            } else {
+                p1.rollDice();
+                p2.rollDice();
+                p3.rollDice();
             }
+            roundNum++;
         }
     }
 
@@ -89,7 +98,7 @@ public class Ceelo {
         }
     }
 
-    // adjusts the chips for both the banker and the players if the banker either automatically loses or wins
+    // adjusts the chips for both the banker and the players depending on who won
     private void switchChips(String status) {
         int p1Chips = p1.getCurrentWager();
         int p2Chips = p2.getCurrentWager();
