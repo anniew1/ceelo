@@ -14,4 +14,14 @@ public class ConsoleUtility {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+    // freezes screen for specified num of seconds
+    public static void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (Exception e) {
+            System.out.println("error");
+        }
+    }
+
 }

@@ -1,10 +1,13 @@
 public class Dice {
 
+
     public Dice() {}
+
 
     public int rollDice() {
         return (int)(Math.random() * 6) + 1;
     }
+
 
     // checks whether the three dice rolled are the numbers 4, 5, 6
     public Boolean check456(int dice1, int dice2, int dice3) {
@@ -20,6 +23,7 @@ public class Dice {
         return false;
     }
 
+
     // checks whether the three dice rolled are the numbers 1, 2, 3
     public Boolean check123(int dice1, int dice2, int dice3) {
         String allThree = "";
@@ -34,6 +38,7 @@ public class Dice {
         return false;
     }
 
+
     // checks whether the three dice rolled is a double and if it is returns a score
     public int checkDouble(int dice1, int dice2, int dice3) {
         if (dice1 == dice2) {
@@ -47,12 +52,5 @@ public class Dice {
         }
     }
 
-    // checks whether the player won the round or not
-    public Boolean winRound(int playerScore, int bankerScore) {
-        if (playerScore >= bankerScore) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 }

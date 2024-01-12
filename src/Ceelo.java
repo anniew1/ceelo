@@ -19,19 +19,30 @@ public class Ceelo {
 
     private void gameLogic() {
         welcome();
-        while ((p1.getChips() != 0 && p2.getChips() != 0 && p3.getChips() != 0) || banker.getChips() != 0) {
+        Boolean allThreePlayersOut = p1.getOutOfGame() && p2.getOutOfGame() && p3.getOutOfGame();
+        while (!allThreePlayersOut || banker.getChips() <= 0) {
             System.out.println("Round " + roundNum + ":");
             printChip();
+
             makeWager(p1.getOutOfGame(), p1);
             makeWager(p2.getOutOfGame(), p2);
             makeWager(p3.getOutOfGame(), p3);
+            ConsoleUtility.clearScreen();
+
             String bankerRoll = banker.rolldice();
+            System.out.println("---------------------------------------");
+            ConsoleUtility.sleep(3000);
+
             if (!bankerRoll.equals("score")) {
                 switchChips(bankerRoll);
             } else {
-                p1.rollDice();
-                p2.rollDice();
-                p3.rollDice();
+                takeTurn(p1);
+                takeTurn(p2);
+                takeTurn(p3);
+
+                checkOutOfGame(p1);
+                checkOutOfGame(p2);
+                checkOutOfGame(p3);
             }
             roundNum++;
         }
@@ -47,11 +58,7 @@ public class Ceelo {
         System.out.println("The goal of the game is to try to bankrupt the banker before he takes all your chips.");
         System.out.println("If the players successfully bankrupt the banker, the player with the most chips wins!");
 
-        try {
-            Thread.sleep(10000);
-        } catch (Exception e) {
-            System.out.println("error");
-        }
+        ConsoleUtility.sleep(10000);
         ConsoleUtility.clearScreen();
 
         // asks the players for their names and creates the three player objects
@@ -78,8 +85,8 @@ public class Ceelo {
 
 
     // asks the player how much they would like to wager
-    private void makeWager(Boolean playerout, Player player) {
-        if (!playerout){
+    private void makeWager(Boolean playerOut, Player player) {
+        if (!playerOut){
             System.out.println(player.getName() + "'s Turn:");
             System.out.print("How much would you like to wager (0 - " + player.getChips() + "): " );
             player.setCurrentWager(scan.nextInt());
@@ -88,17 +95,11 @@ public class Ceelo {
                 System.out.print("How much would you like to wager (0 - " + player.getChips() + "): " );
                 player.setCurrentWager(scan.nextInt());
             }
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                System.out.println("error");
-            }
-
-            ConsoleUtility.clearScreen();
+            ConsoleUtility.sleep(1000);
         }
     }
 
-    // adjusts the chips for both the banker and the players depending on who won
+    // adjusts the chips for both the banker and the players depending on who won (win = banker win)
     private void switchChips(String status) {
         int p1Chips = p1.getCurrentWager();
         int p2Chips = p2.getCurrentWager();
@@ -118,5 +119,63 @@ public class Ceelo {
 
     }
 
+    // adjusts the chips for both the banker and the players depending on who won (win = player win)
+    private void switchChips(String status, Player player) {
+        int chips = player.getCurrentWager();
 
+        if (status.equals("win")) {
+            player.changeChips(chips);
+            banker.changeChips(chips * -1);
+        } else {
+            player.changeChips(chips * -1);
+            banker.changeChips(chips);
+        }
+    }
+
+    // determines whether player lost or won
+    private String playerWin(String result, Player player) {
+        String victory;
+        if (result.equals("win")) {
+            victory = "win";
+        } else if (result.equals("lose")) {
+            victory = "lose";
+        } else {
+            victory = higherScore(player.getRoundScore(), banker.getRoundScore());
+        }
+        return victory;
+    }
+
+    // checks whether the player's score is higher than the bankers & in the case there is a tie player wins
+    private String higherScore(int playerScore, int bankerScore) {
+        if (playerScore >= bankerScore) {
+            return "win";
+        } else {
+            return "lose";
+        }
+    }
+
+    // rolls the dice and does the according action depending on whether the player is still in or out of tge game
+    private void takeTurn(Player player) {
+        if (!player.getOutOfGame()) {
+            String playerRoll = player.rollDice(player);
+            System.out.println("---------------------------------------");
+            ConsoleUtility.sleep(3000);
+
+            switchChips(playerWin(playerRoll, player), player);
+        }
+    }
+
+    // checks whether player lost and prints out a statement
+    private void checkOutOfGame(Player player) {
+        if (player.getOutOfGame()) {
+            ConsoleUtility.sleep(1000);
+            System.out.println(player.getName() + " has 0 chips and is out of the game");
+            System.out.println("---------------------------------------");
+        }
+    }
 }
+
+
+
+
+
