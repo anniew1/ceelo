@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.util.Scanner;
 public class Ceelo {
 
@@ -20,7 +21,7 @@ public class Ceelo {
     private void gameLogic() {
         welcome();
         Boolean allThreePlayersOut = p1.getOutOfGame() && p2.getOutOfGame() && p3.getOutOfGame();
-        while (!allThreePlayersOut || banker.getChips() <= 0) {
+        while (!allThreePlayersOut && banker.getChips() > 0) {
             System.out.println("Round " + roundNum + ":");
             printChip();
 
@@ -43,9 +44,13 @@ public class Ceelo {
                 checkOutOfGame(p1);
                 checkOutOfGame(p2);
                 checkOutOfGame(p3);
+                System.out.println("---------------------------------------");
+                ConsoleUtility.sleep(1000);
             }
             roundNum++;
+            allThreePlayersOut = p1.getOutOfGame() && p2.getOutOfGame() && p3.getOutOfGame();
         }
+        printWinner();
     }
 
     // welcomes the players into the game and explains the rules and also initializes all three players
@@ -167,13 +172,34 @@ public class Ceelo {
 
     // checks whether player lost and prints out a statement
     private void checkOutOfGame(Player player) {
+        ConsoleUtility.sleep(1000);
         if (player.getOutOfGame()) {
-            ConsoleUtility.sleep(1000);
-            System.out.println(player.getName() + " has 0 chips and is out of the game");
-            System.out.println("---------------------------------------");
+            System.out.println(player.getName() + ":" + ConsoleUtility.RED + " out of the game" + ConsoleUtility.RESET);
+        } else {
+            System.out.println(player.getName() + ": in game");
+        }
+    }
+
+    // prints out the winner of the whole game
+    private void printWinner() {
+        if (banker.getChips() > 0) {
+            System.out.println(ConsoleUtility.RED + "The banker wins and all three players lose" + ConsoleUtility.RESET);
+        } else {
+            int greatest = p1.getChips();
+            Player player = p1;
+            if (p2.getChips() > greatest) {
+                greatest = p2.getChips();
+                player = p2;
+            }
+            if (p3.getChips() > greatest) {
+                greatest = p3.getChips();
+                player = p3;
+            }
+            System.out.println(ConsoleUtility.YELLOW + player.getName() + " wins with " + greatest + " chips!" + ConsoleUtility.RESET);
         }
     }
 }
+
 
 
 

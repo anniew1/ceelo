@@ -78,17 +78,17 @@ public class Player {
             int dice3 = (int)(Math.random() * 6) + 1;
 
             if ((dice1 == dice2 && dice2 == dice3) || dice.check456(dice1, dice2, dice3)) {
-                System.out.println(player.getName() + " has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\n" + player.getName() + " automatically wins this round!");
+                System.out.println(player.getName() + " has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\n" + player.getName() + " automatically" + ConsoleUtility.YELLOW +  " wins" + ConsoleUtility.RESET + " this round!");
                 win = "win";
                 roundFinished = true;
             } else if (dice.check123(dice1, dice2, dice3)) {
-                System.out.println(player.getName() + " has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\n" + player.getName() + " automatically loses this round!");
+                System.out.println(player.getName() + " has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\n" + player.getName() + " automatically" + ConsoleUtility.RED +  " loses" + ConsoleUtility.RESET + " this round!");
                 win = "lose";
                 roundFinished = true;
             } else if (dice.checkDouble(dice1, dice2, dice3) != 0) {
                 roundScore = dice.checkDouble(dice1, dice2, dice3);
                 System.out.println(player.getName() + " has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\n" + player.getName() + " got a double!");
-                System.out.println("Their round score is " + roundScore);
+                System.out.println("Their round score is " + ConsoleUtility.BLUE + roundScore + ConsoleUtility.RESET);
                 roundFinished = true;
             }
         }

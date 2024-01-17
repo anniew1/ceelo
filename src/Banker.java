@@ -40,15 +40,15 @@ public class Banker {
 
 
             if ((dice1 == dice2 && dice2 == dice3) || dice.check456(dice1, dice2, dice3)) {
-                System.out.println("The banker has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\nThe banker automatically wins this round!");
+                System.out.println("The banker has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\nThe banker automatically" + ConsoleUtility.YELLOW +  " wins" + ConsoleUtility.RESET + " this round!");
                 return "win";
             } else if (dice.check123(dice1, dice2, dice3)) {
-                System.out.println("The banker has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\nThe banker automatically loses this round!");
+                System.out.println("The banker has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\nThe banker automatically" + ConsoleUtility.RED +  " loses" + ConsoleUtility.RESET + " this round!");
                 return "lose";
             } else if (dice.checkDouble(dice1, dice2, dice3) != 0) {
                 roundScore = dice.checkDouble(dice1, dice2, dice3);
                 System.out.println("The banker has rolled a " + dice1 + ", " + dice2 + ", " + dice3 + "\nThat is a double!");
-                System.out.println("The banker's score for this round is " + roundScore);
+                System.out.println("The banker's score for this round is " + ConsoleUtility.BLUE + roundScore + ConsoleUtility.RESET);
                 return "score";
             }
         }
