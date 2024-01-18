@@ -56,7 +56,7 @@ public class Ceelo {
     // welcomes the players into the game and explains the rules and also initializes all three players
     private void welcome() {
         ConsoleUtility.clearScreen();
-        System.out.println("Welcome to Cee - lo!");
+        System.out.println(ConsoleUtility.CYAN + "Welcome to Cee - lo!" + ConsoleUtility.RESET);
         System.out.println();
         System.out.println("Rules: ");
         System.out.println("There are 3 players and a banker (controlled by computer)");
@@ -92,7 +92,7 @@ public class Ceelo {
     // asks the player how much they would like to wager
     private void makeWager(Boolean playerOut, Player player) {
         if (!playerOut){
-            System.out.println(player.getName() + "'s Turn:");
+            System.out.println(ConsoleUtility.PURPLE + player.getName() + "'s Turn:" + ConsoleUtility.RESET);
             System.out.print("How much would you like to wager (0 - " + player.getChips() + "): " );
             player.setCurrentWager(scan.nextInt());
             while (player.getCurrentWager() < 0 || player.getCurrentWager() > player.getChips()) {
@@ -109,17 +109,24 @@ public class Ceelo {
         int p1Chips = p1.getCurrentWager();
         int p2Chips = p2.getCurrentWager();
         int p3Chips = p3.getCurrentWager();
+        int totalChips = p1Chips + p2Chips + p3Chips;
 
         if (status.equals("win")) {
             p1.changeChips(p1Chips * -1);
-            p2.changeChips(p1Chips * -1);
-            p3.changeChips(p1Chips * -1);
-            banker.changeChips(p1Chips + p2Chips + p3Chips);
+            p2.changeChips(p2Chips * -1);
+            p3.changeChips(p3Chips * -1);
+            banker.changeChips(totalChips);
+            System.out.println("The banker has won " + totalChips + " chip(s) and the players has " + ConsoleUtility.RED + "lost: " + ConsoleUtility.RESET);
+            printChipDifferences(p1Chips, p2Chips, p3Chips, totalChips);
+            System.out.println("---------------------------------------");
         } else {
             p1.changeChips(p1Chips);
-            p2.changeChips(p1Chips);
-            p3.changeChips(p1Chips);
+            p2.changeChips(p2Chips);
+            p3.changeChips(p3Chips);
             banker.changeChips((p1Chips + p2Chips + p3Chips) * -1);
+            System.out.println("The banker has lost " + totalChips + " chip(s) and the players has " + ConsoleUtility.YELLOW + "won: " + ConsoleUtility.RESET);
+            printChipDifferences(p1Chips, p2Chips, p3Chips, totalChips);
+            System.out.println("---------------------------------------");
         }
 
     }
@@ -195,8 +202,15 @@ public class Ceelo {
                 greatest = p3.getChips();
                 player = p3;
             }
-            System.out.println(ConsoleUtility.YELLOW + player.getName() + " wins with " + greatest + " chips!" + ConsoleUtility.RESET);
+            System.out.println(ConsoleUtility.YELLOW + "The players have successfully bankrupted the banker and "+player.getName() + " wins with " + greatest + " chips!" + ConsoleUtility.RESET);
         }
+    }
+
+    // prints out the number of chips lost and won by all three players and banker
+    private void printChipDifferences(int p1Chips, int p2Chips, int p3Chips, int bankerChips) {
+        System.out.println(p1.getName() + ": " + p1Chips + " chips");
+        System.out.println(p2.getName() + ": " + p2Chips + " chips");
+        System.out.println(p3.getName() + ": " + p3Chips + " chips");
     }
 }
 

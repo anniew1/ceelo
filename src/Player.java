@@ -62,6 +62,7 @@ public class Player {
         chips += difference;
         if (chips == 0) {
             outOfGame = true;
+            currentWager = 0;
         }
     }
 
