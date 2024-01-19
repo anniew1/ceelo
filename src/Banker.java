@@ -2,10 +2,12 @@ public class Banker {
     private int chips;
     private int roundScore;
     private Dice dice;
+    private int difference;
 
 
     public Banker() {
         chips = 1000;
+        difference = 0;
         dice = new Dice();
     }
 
@@ -21,15 +23,28 @@ public class Banker {
         return roundScore;
     }
 
+    // returns the chip difference from the round
+    public int getDifference() {
+        return difference;
+    }
 
     // changes the amount of chips banker has after round
     public void changeChips(int difference) {
         chips += difference;
     }
 
+    // changes the amount that the banker loses or gains in the round
+    public void changeDifference(int change) {
+        difference += change;
+    }
+
+    // reset round gains/losses
+    public void resetDifference() {
+        difference = 0;
+    }
 
     //rolls 3 dice and returns a string depending on whether the banker won
-    public String rolldice() {
+    public String rollDice() {
         Boolean roundFinished = false;
 
 
@@ -53,6 +68,12 @@ public class Banker {
             }
         }
         return "nothing";
+    }
+
+    // resets the game for a new round
+    public void resetGame() {
+        chips = 1000;
+        difference = 0;
     }
 
 

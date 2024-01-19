@@ -7,6 +7,7 @@ public class Player {
 
     private int currentWager;
     private int roundScore;
+    private Boolean roundWin;
 
 
     private Boolean outOfGame;
@@ -19,8 +20,13 @@ public class Player {
         currentWager = 0;
         outOfGame = false;
         dice = new Dice();
+        roundWin = false;
     }
 
+    // returns a Boolean value indicating whether the player has won the round or not
+    public Boolean getRoundWin() {
+        return roundWin;
+    }
 
     // returns the number of chips player has
     public int getChips() {
@@ -51,9 +57,13 @@ public class Player {
         return roundScore;
     }
 
-
+    // sets the amount that the player wagered for the round
     public void setCurrentWager(int wager) {
         currentWager = wager;
+    }
+
+    public void setRoundWin(Boolean win) {
+        roundWin = win;
     }
 
 
@@ -62,7 +72,6 @@ public class Player {
         chips += difference;
         if (chips == 0) {
             outOfGame = true;
-            currentWager = 0;
         }
     }
 
@@ -94,6 +103,14 @@ public class Player {
             }
         }
         return win;
+    }
+
+    // resets the game
+    public void resetGame() {
+        chips = 100;
+        currentWager = 0;
+        outOfGame = false;
+        roundWin = false;
     }
 
 
