@@ -18,14 +18,28 @@ public class Ceelo {
         highestChips = 0;
     }
 
-    public void runGame() {
-        gameLogic();
+    // prints out the menu
+    public void play() {
+        welcome();
+        Boolean quit = false;
+        while (!quit) {
+            System.out.println("Menu:");
+            System.out.println("1. Start New Game");
+            System.out.println("2. View High Score");
+            System.out.println("3. Quit");
+            int choice = scan.nextInt();
+            if (choice == 1) {
+                gameLogic();
+            } else if (choice == 2) {
+                printHighScore();
+            } else if (choice == 3) {
+                quit = true;
+            }
+        }
     }
 
     private void gameLogic() {
-        welcome();
-        String playAgain = "y";
-        while (playAgain.equals("y")) {
+            ConsoleUtility.clearScreen();
             Boolean allThreePlayersOut = p1.getOutOfGame() && p2.getOutOfGame() && p3.getOutOfGame();
             while (!allThreePlayersOut && banker.getChips() > 0) {
                 System.out.println("Round " + roundNum + ":");
@@ -66,18 +80,16 @@ public class Ceelo {
                 System.out.println("---------------------------------------");
                 ConsoleUtility.sleep(1000);
                 roundNum++;
+
+                ConsoleUtility.clearScreen();
             }
             printWinner();
-            System.out.print("Would you like to play again (y/n) : ");
-            playAgain = scan.nextLine();
 
             p1.resetGame();
             p2.resetGame();
             p3.resetGame();
             banker.resetGame();
             roundNum = 1;
-        }
-        System.out.println(ConsoleUtility.YELLOW + highestPlayer.getName() + " had the highest chip amount with " + highestChips + " chips!" + ConsoleUtility.RESET);
     }
 
     // welcomes the players into the game and explains the rules and also initializes all three players
@@ -144,6 +156,11 @@ public class Ceelo {
             p1.changeChips(p1Chips * -1);
             p2.changeChips(p2Chips * -1);
             p3.changeChips(p3Chips * -1);
+
+            p1.setRoundWin(false);
+            p2.setRoundWin(false);
+            p3.setRoundWin(false);
+
             banker.changeChips(totalChips);
             banker.changeDifference(totalChips);
 
@@ -151,6 +168,11 @@ public class Ceelo {
             p1.changeChips(p1Chips);
             p2.changeChips(p2Chips);
             p3.changeChips(p3Chips);
+
+            p1.setRoundWin(true);
+            p2.setRoundWin(true);
+            p3.setRoundWin(true);
+
             banker.changeChips(totalChips * -1);
             banker.changeDifference(totalChips * -1);
         }
@@ -216,7 +238,6 @@ public class Ceelo {
 
     // prints out the winner of the whole game
     private void printWinner() {
-        Boolean tie = false;
         if (banker.getChips() > 0) {
             System.out.println(ConsoleUtility.RED + "The banker wins and all three players lose" + ConsoleUtility.RESET);
         } else {
@@ -241,19 +262,21 @@ public class Ceelo {
     }
 
     // prints out the number of chips lost and won by all three players and banker
-    private void printChipDifferences(int p1Chips, int p2Chips, int p3Chips, int bankerChips) {
-        System.out.println(p1.getName() + ": " + p1Chips + " chips");
-        System.out.println(p2.getName() + ": " + p2Chips + " chips");
-        System.out.println(p3.getName() + ": " + p3Chips + " chips");
-    }
-
-    // prints out the number of chips lost and won by all three players and banker
     private void printChipDifferences(Boolean victory, Player player) {
         ConsoleUtility.sleep(1000);
         if (victory || player.getCurrentWager() == 0) {
-            System.out.println(player.getName() + ": " + player.getCurrentWager() + " chips");
+            System.out.println(player.getName() + ": +" + player.getCurrentWager() + " chips");
         } else {
             System.out.println(player.getName() + ": " + ConsoleUtility.RED + player.getCurrentWager() * -1 + " chips" + ConsoleUtility.RESET);
+        }
+    }
+
+    // prints out the high score
+    private void printHighScore() {
+        if (highestPlayer != null) {
+            System.out.println(ConsoleUtility.YELLOW + highestPlayer.getName() + " had the highest chip amount with " + highestChips + " chips!" + ConsoleUtility.RESET);
+        } else {
+            System.out.println("The players have never won before");
         }
     }
 
